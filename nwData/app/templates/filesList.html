@@ -1,0 +1,50 @@
+<%
+        var classname = '';
+        var includes = 0;
+        var msg;
+
+        if(lastChange <= 0){
+            msg = 'Never';
+        } else {
+            msg = modo.Calendar.prototype.dateToString('d.m.Y - H:i:s', lastChange);
+        }
+
+        includes = fileWatchers.length - 1;
+
+        switch(state){
+            case 1:
+                classname = 'success';
+                msg = 'Compilation successful';
+            break;
+            case 2:
+                classname = 'error';
+                msg = 'Compilation error';
+            break;
+        }
+%><div class="<%= classname %>">
+    <div class="headBar">
+        <h3><%= fileName %>
+        <% if(includes){ %><span class="includes">(+ <%= includes %>)</span><% } %>
+        </h3>
+        <button class="recompile" title="Recompile now"></button>
+        <button class="remove" title="Remove from watch list"></button>
+    </div>
+    <div class="bar">
+        <span class="inputPath"><%= inputFolder %><b><%= fileName %></b></span>
+        <span class="status"><%= msg %></span>
+    </div>
+    <div class="bar">
+        <span class="outputPath"><%= outputPath %></span>
+        <button class="pickOutputPath" title="Change target file"></button>
+
+        <div class="options">
+            <button class="minify <%= doMinify ? 'active' : '' %>" title="Toggle CSS minification"></button>
+            <button class="love <%= doLove ? 'active' : '' %>" title="Toggle SimpLESS CSS comment"></button>
+        </div>
+    </div>
+    <% if(state === 2){ %>
+    <div class="errorbox">
+        Error in file: <b><%= error.filename.replace(inputFolder, '') %></b> on line <b><%= error.line %></b>: <%= error.message %>
+    </div>
+    <% } %>
+</div>
